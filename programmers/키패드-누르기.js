@@ -1,36 +1,33 @@
 function solution(numbers, hand) {
-  const lefts = [1, 4, 7];
-  const rights = [3, 6, 9];
-  let leftHand = [3, 0];
-  let rightHand = [3, 2];
+  let left = [3, 0];
+  let right = [3, 2];
   const result = [];
 
   numbers.forEach((n) => {
-    if (lefts.includes(n)) {
-      leftHand = [parseInt(n / 3), 0];
+    if (n % 3 === 1) {
       result.push('L');
-    } else if (rights.includes(n)) {
-      rightHand = [parseInt(n / 3) - 1, 2];
-      result.push('R');
-    } else {
-      if (
-        Math.abs(leftHand[0] + leftHand[1] - parseInt(n / 3) - 1) >
-        Math.abs(rightHand[0] + rightHand[1] - parseInt(n / 3) - 1)
-      ) {
+      left = [parseInt(n / 3), 0];
+    } else if (n % 3 === 2 || n === 0) {
+      const leftNum = Math.abs(left[0] + left[1] - (parseInt(n / 3) + 2));
+      const rightNum = Math.abs(right[0] + right[1] - (parseInt(n / 3) + 2));
+
+      if (leftNum > rightNum) {
         result.push('L');
-      } else if (
-        Math.abs(leftHand[0] + leftHand[1] - parseInt(n / 3) - 1) <
-        Math.abs(rightHand[0] + rightHand[1] - parseInt(n / 3) - 1)
-      ) {
+        left = [parseInt(n / 3), 1];
+      } else if (leftNum < rightNum) {
         result.push('R');
+        right = [parseInt(n / 3), 1];
       } else {
-        result.push(hand.splice(1).toUpperCase());
-        if (hand.splice(1).toUpperCase() === 'L') {
-          rightHand = [parseInt(n / 3), 1];
-        } else {
-          leftHand = [parseInt(n / 3), 1];
+        if (hand.charAt(0) === 'L') {
+          result.push('L');
+          left = [parseInt(n / 3), 1];
         }
+        result.push('R');
+        right = [parseInt(n / 3), 1];
       }
+    } else {
+      result.push('R');
+      right = [parseInt(n / 3) - 1, 2];
     }
   });
   return result.join('');
