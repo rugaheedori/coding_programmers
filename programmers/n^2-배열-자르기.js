@@ -6,9 +6,3 @@ function solution(n, left, right) {
   }
   return answer;
 }
-
-const n = 3;
-const left = 2;
-const right = 5;
-
-console.log(solution(n, left, right));
