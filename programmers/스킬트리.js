@@ -10,6 +10,14 @@ function solution(skill, skill_trees) {
         result.push(skills.indexOf(skill_trees[i][j]));
       }
     }
+
+    let cnt2 = 0;
+
+    result.forEach((el, idx) => {
+      if (el === idx) cnt2 += 1;
+    });
+
+    if (cnt2 === result.length || result.length === 0) cnt += 1;
   }
   return cnt;
 }
