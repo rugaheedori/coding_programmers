@@ -3,12 +3,12 @@ function solution(id_list, reports, k) {
   const reporters = [];
 
   reports.forEach((report) => {
-    const poeple = report.split(' ');
+    const people = report.split(' ');
 
-    if (!badMans[poeple[1]]) badMans[poeple[1]] = [];
+    if (!badMans[people[1]]) badMans[people[1]] = [];
 
-    if (!badMans[poeple[1]].includes(poeple[0])) {
-      badMans[poeple[1]].push(poeple[0]);
+    if (!badMans[people[1]].includes(people[0])) {
+      badMans[people[1]].push(people[0]);
     }
   });
 
