@@ -1,9 +1,10 @@
 function solution(number, k) {
   const answer = [number[0]];
+  const maxLen = number.length - k;
 
   for (let i = 1; i < number.length; i++) {
     if (!k) {
-      answer.push(...number.slice(i));
+      answer.push(number.slice(i));
       break;
     }
 
@@ -15,5 +16,5 @@ function solution(number, k) {
     answer.push(number[i]);
   }
 
-  return answer.join('');
+  return answer.join('').slice(0, maxLen);
 }
