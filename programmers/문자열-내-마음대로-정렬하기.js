@@ -6,7 +6,3 @@ function solution(strings, n) {
 
   return strings;
 }
-
-const strings = ['sun', 'bez', 'cer'];
-const n = 1;
-console.log(solution(strings, n));
