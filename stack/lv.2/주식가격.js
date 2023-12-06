@@ -16,3 +16,28 @@ function solution(prices) {
 
   return answer;
 }
+
+function solution(prices) {
+  const answer = [];
+  const stack = [];
+
+  prices.forEach((x, idx) => {
+    if (idx > 0) {
+      while (stack.length > 0) {
+        let top = stack.pop();
+
+        if (prices[top] <= x) {
+          stack.push(top);
+          break;
+        } else {
+          answer[top] = idx - top;
+        }
+      }
+    }
+
+    stack.push(idx);
+    answer[idx] = prices.length - 1 - idx;
+  });
+
+  return answer;
+}
