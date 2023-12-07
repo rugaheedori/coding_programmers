@@ -1,3 +1,4 @@
+// 이중 반복문 사용
 function solution(prices) {
   const answer = [];
 
@@ -17,6 +18,7 @@ function solution(prices) {
   return answer;
 }
 
+// stack 알고리즘 사용
 function solution(prices) {
   const answer = [];
   const stack = [];
