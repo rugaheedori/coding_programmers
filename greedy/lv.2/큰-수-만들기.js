@@ -16,5 +16,6 @@ function solution(number, k) {
     answer.push(number[i]);
   }
 
+  //* ex) 98765432 -> 9876으로 지우는 작업
   return answer.join("").slice(0, maxLen);
 }
