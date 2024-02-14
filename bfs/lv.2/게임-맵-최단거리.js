@@ -2,15 +2,17 @@ function solution(maps) {
   const queue = [[0, 0, 0]];
   const visited = new Set(["0,0"]);
   let answer = -1;
+  const col = maps[0].length - 1;
+  const row = maps.length - 1;
 
-  for (let i = 0; i < queue.length; i++) {
-    const [y, x, value] = queue[i];
+  while(queue.length) {
+    const [y, x, value] = queue.shift();
 
-    bfs(y, x, value);
+      bfs(y, x, value);
   }
 
   function bfs(y, x, value) {
-    if (x === maps[0].length - 1 && y === maps.length - 1) {
+    if (x === col && y === row) {
       // 처음 도착한 경우거나, 도착한 경우 중 가장 작은 값일 때
       if (answer === -1 || answer > value + 1) {
         answer = value + 1;
@@ -27,22 +29,18 @@ function solution(maps) {
     ];
 
     for (const [x, y] of locations) {
-      // index 범위 내에 있어야 함
-      if (x < 0 || x >= maps[0].length) {
-        continue;
-      } else if (y < 0 || y >= maps.length) {
-        continue;
-        // 방문한 적 있는 경우
-      } else if (visited.has(`${y},${x}`)) {
-        continue;
-        // 벽인 경우
-      } else if (maps[y][x] === 0) {
+      // 범위 내 && 벽이 아님 && 방문한 적 없음
+      if (
+        x >= 0 &&
+        x <= col &&
+        y >= 0 &&
+        y <= row &&
+        maps[y][x] &&
+        !visited.has(`${y},${x}`)
+      ) {
+        queue.push([y, x, value + 1]);
         visited.add(`${y},${x}`);
-        continue;
       }
-      // 방문 한 적 없어야 함.
-      queue.push([y, x, value + 1]);
-      visited.add(`${y},${x}`);
     }
   }
 
