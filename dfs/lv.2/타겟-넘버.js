@@ -1,21 +1,17 @@
 function solution(numbers, target) {
-  let queue = [numbers[0], -numbers[0]];
-  let nextQueue = [];
+  let answer = 0;
 
-  for (let i = 1; i < numbers.length; i++) {
-    while (queue.length > 0) {
-      const current = queue.shift();
-
-      nextQueue.push(current + numbers[i]);
-      nextQueue.push(current - numbers[i]);
-    }
-
-    queue = [...nextQueue];
-
-    if (i < numbers.length - 1) {
-      nextQueue = [];
+  function dfs(idx, value) {
+    if (idx !== numbers.length) {
+      dfs(idx + 1, value + numbers[idx]);
+      dfs(idx + 1, value - numbers[idx]);
+    } else {
+      if (target === value) {
+        answer += 1;
+      }
     }
   }
 
-  return nextQueue.filter((x) => x === target).length;
+  dfs(0, 0)
+  return answer;
 }
