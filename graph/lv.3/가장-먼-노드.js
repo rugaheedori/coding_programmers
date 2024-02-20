@@ -1,24 +1,47 @@
 function solution(n, edge) {
-  // n * n array 만들기
-  const arr = Array.from(Array(n), () => new Set());
-  // vertex = edge에 따라 값 설정해주기
-  edge.forEach((x) => {
-    const [v1, v2] = x;
+  let maxDepth = 0;
+  let answer = 0;
+  const map = new Map();
+  const visited = new Set([1]);
+  const queue = [[1, 0]];
 
-    arr[v1 - 1].add(v2);
-    arr[v2 - 1].add(v1);
-  });
+  while (edge.length) {
+    const [a, b] = edge.pop();
+
+    if (map.get(a) == null) {
+      map.set(a, new Set([b]));
+    } else {
+      map.set(a, new Set([...map.get(a), b]));
+    }
+
+    if (map.get(b) == null) {
+      map.set(b, new Set([a]));
+    } else {
+      map.set(b, new Set([...map.get(b), a]));
+    }
+  }
+
+  while (queue.length) {
+    const [current, depth] = queue.shift();
+
+    dfs(current, depth);
+  }
+
+  function dfs(node, depth) {
+    for (let x of map.get(node).values()) {
+      if (!visited.has(x)) {
+        visited.add(x);
+        queue.push([x, depth + 1]);
+      }
+    }
+
+    if (depth > maxDepth) {
+      maxDepth = depth;
+      answer = 1;
+    } else if (depth === maxDepth) {
+      answer += 1;
+    }
+  }
+
+  return answer;
 }
-
-console.log(
-  "answer: ",
-  solution(6, [
-    [3, 6],
-    [4, 3],
-    [3, 2],
-    [1, 3],
-    [1, 2],
-    [2, 4],
-    [5, 2],
-  ])
-);
