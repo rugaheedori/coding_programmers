@@ -1,66 +1,88 @@
-function solution(scoville, K) {
-  let answer = -1;
-  const heap = new Map();
+class MinHeap {
+  constructor() {
+    this.heap = [];
+  }
 
-  scoville.forEach((x, idx) => {
-    let currentIdx = idx;
-    let current = x;
+  size() {
+    return this.heap.length;
+  }
 
-    heap.set(idx, x);
+  swap(a, av, b, bv) {
+    this.heap[a] = bv;
+    this.heap[b] = av;
+  }
 
-    while (currentIdx > 0) {
-      const parentIdx = Math.floor((currentIdx - 1) % 2);
-      const parent = heap.get(parentIdx);
+  insert(value) {
+    this.heap.push(value);
+    let currentIndex = this.heap.length - 1;
 
-      if (current > parent) {
-        break;
-      }
-
-      heap.set(idx, parent);
-      heap.set(parentIdx, x);
-
-      currentIdx = parentIdx;
-      current = parent;
-    }
-  });
-
-  let cnt = 0;
-
-  while (heap.size) {
-    cnt += 1;
-
-    const min = heap.get(0);
-    const nextMin = heap.get(1);
-    const mixed = min + nextMin * 2;
-
-    if (K <= mixed) {
-      break;
-    }
-
-    let currentIdx = 0;
-    let current = mixed;
-
-    heap.set(currentIdx, mixed);
-
-    while (currentIdx < Math.floor(heap.size % 2)) {
-      let childIdx = (currentIdx + 1) * 2 - 1;
-
-      if (
-        childIdx + 1 < heap.size &&
-        heap.get(childIdx) > heap.get(childIdx + 1)
-      ) {
-        childIdx += 1;
-      }
-
-      if (heap.get(childIdx) < current) {
-        heap.set(currentIdx, heap.get(childIdx));
-        heap.set(childIdx, current);
-      }
-
-      current = heap.get(childIdx);
-      currentIdx = childIdx;
+    while (
+      currentIndex > 0 &&
+      this.heap[currentIndex] < this.heap[Math.floor((currentIndex - 1) / 2)]
+    ) {
+      this.swap(
+        currentIndex,
+        this.heap[currentIndex],
+        Math.floor((currentIndex - 1) / 2),
+        this.heap[Math.floor((currentIndex - 1) / 2)]
+      );
+      currentIndex = Math.floor((currentIndex - 1) / 2);
     }
   }
 
-  return cnt || answer;
+  extract() {
+    if (this.heap.length === 0) return null;
+    if (this.heap.length === 1) return this.heap.pop();
+
+    const minValue = this.heap[0];
+    this.heap[0] = this.heap.pop();
+    let currentIndex = 0;
+
+    while (currentIndex * 2 + 1 < this.heap.length) {
+      let minChildIndex =
+        currentIndex * 2 + 2 < this.heap.length &&
+        this.heap[currentIndex * 2 + 2] < this.heap[currentIndex * 2 + 1]
+          ? currentIndex * 2 + 2
+          : currentIndex * 2 + 1;
+
+      if (this.heap[currentIndex] < this.heap[minChildIndex]) {
+        break;
+      }
+
+      this.swap(
+        currentIndex,
+        this.heap[currentIndex],
+        minChildIndex,
+        this.heap[minChildIndex]
+      );
+      currentIndex = minChildIndex;
+    }
+
+    return minValue;
+  }
+
+  min() {
+    return this.heap[0];
+  }
+}
+
+function solution(scoville, K) {
+  const minHeap = new MinHeap();
+
+  scoville.forEach((x) => {
+    minHeap.insert(x);
+  });
+
+  let mixedCount = 0;
+
+  while (minHeap.size() >= 2 && minHeap.min() < K) {
+    const first = minHeap.extract();
+    const second = minHeap.extract();
+    const mixed = first + second * 2;
+
+    minHeap.push(mixed);
+    mixedCount++;
+  }
+
+  return minHeap.peek() >= K ? mixedCount : -1;
 }
