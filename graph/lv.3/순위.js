@@ -1,3 +1,39 @@
+// 플로이드 워셜
+function solution(n, results) {
+  const arr = Array.from(Array(n), () => Array(n).fill(false));
+
+  results.forEach(([i, j]) => {
+    arr[i - 1][j - 1] = true;
+  });
+
+  for (let k = 0; k < n; k++) {
+    for (let i = 0; i < n; i++) {
+      for (let j = 0; j < n; j++) {
+        // i win j == i win k & k win j
+        arr[i][j] = arr[i][j] || (arr[i][k] && arr[k][j]);
+      }
+    }
+  }
+
+  let answer = n;
+
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n; j++) {
+      if (i === j) {
+        continue;
+      }
+
+      // 서로의 우열을 가릴 수 없는 경우
+      if (!arr[i][j] && !arr[j][i]) {
+        answer--;
+        break;
+      }
+    }
+  }
+
+  return answer;
+}
+
 function solution(n, results) {
   let answer = 0;
   const map = new Map();
