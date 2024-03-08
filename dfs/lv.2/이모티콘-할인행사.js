@@ -24,56 +24,26 @@ function solution(users, emoticons) {
     }
   }
 
-  function dfs(idx, values) {
-    if (idx < emoticons.length - 1) {
-      dfs(
-        idx + 1,
-        values.map((x, index) => {
-          if (map.get(40).has(index)) {
-            return x + emoticons[idx + 1] * 0.6;
-          }
-          return x;
-        })
-      );
-      dfs(
-        idx + 1,
-        values.map((x, index) => {
-          if (map.get(30).has(index)) {
-            return x + emoticons[idx + 1] * 0.7;
-          }
-          return x;
-        })
-      );
+  function setValue(values, depth, sale) {
+    return values.map((x, idx) => {
+      return map.get(sale).has(idx)
+        ? x + emoticons[depth + 1] * (1 - sale / 100)
+        : x;
+    });
+  }
 
-      dfs(
-        idx + 1,
-        values.map((x, index) => {
-          if (map.get(20).has(index)) {
-            return x + emoticons[idx + 1] * 0.8;
-          }
-          return x;
-        })
-      );
-
-      dfs(
-        idx + 1,
-        values.map((x, index) => {
-          if (map.get(10).has(index)) {
-            return x + emoticons[idx + 1] * 0.9;
-          }
-          return x;
-        })
-      );
+  function dfs(depth, values) {
+    if (depth < emoticons.length - 1) {
+      dfs(depth + 1, setValue(values, depth, 40));
+      dfs(depth + 1, setValue(values, depth, 30));
+      dfs(depth + 1, setValue(values, depth, 20));
+      dfs(depth + 1, setValue(values, depth, 10));
     } else {
       let membership = 0;
       let cost = 0;
 
       values.forEach((x, idx) => {
-        if (users[idx][1] > x) {
-          cost += x;
-        } else {
-          membership += 1;
-        }
+        users[idx][1] > x ? (cost += x) : (membership += 1);
       });
 
       if (
