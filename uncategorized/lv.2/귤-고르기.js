@@ -3,11 +3,7 @@ function solution(k, tangerine) {
   let answer = 0;
 
   tangerine.forEach((x) => {
-    if (cnt.get(x)) {
-      cnt.set(x, cnt.get(x) + 1);
-    } else {
-      cnt.set(x, 1);
-    }
+    cnt.set(x, (cnt.get(x) || 0) + 1);
   });
 
   for (let c of Array.from(cnt.values()).sort((a, b) => b - a)) {
