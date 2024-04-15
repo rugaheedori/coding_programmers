@@ -41,12 +41,10 @@ function solution(n, works) {
     if (max === 0) return 0;
 
     for (let i = 0; i < works.length; i++) {
-      if (works[i] >= max) {
-        works[i] -= 1;
-        n--;
-      }
+      if (works[i] < max || !n) break;
 
-      if (!n) break;
+      works[i] -= 1;
+      n--;
     }
   }
 
