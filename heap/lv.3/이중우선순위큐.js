@@ -122,9 +122,9 @@ function solution(operations) {
       maxHeap.insert(number * 1);
     } else {
       if (number === "1") {
-        "max", maxHeap.extractMax();
+        maxHeap.extractMax();
       } else {
-        "min", maxHeap.extractMin();
+        maxHeap.extractMin();
       }
     }
   });
@@ -133,4 +133,21 @@ function solution(operations) {
   const min = maxHeap.extractMin() || max;
 
   return [max, min];
+}
+
+function solution(operations) {
+  const queue = [];
+
+  operations.forEach((x) => {
+    const [command, number] = x.split(" ");
+
+    if (command === "I") {
+      queue.push(number * 1);
+      queue.sort((a, b) => b - a);
+    } else {
+      number === "1" ? queue.shift() : queue.pop();
+    }
+  });
+
+  return [queue[0] || 0, queue.pop() || 0];
 }
